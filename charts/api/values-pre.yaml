@@ -1,0 +1,24 @@
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  host: curso-api.proyectosrandom.es
+  clusterIssuer: letsencrypt-prod
+  tls:
+    - hosts:
+      - curso-api.proyectosrandom.es
+      secretName: curso-api-proyectosrandom-es-tls
+replicaCount: 2
+image:
+  repository: jvelascoiti/backend-fast-api
+  tag: "1.0.2"
+  pullPolicy: Always
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"   
+  limits:
+    cpu: "200m"
+    memory: "128Mi"
+postgres:
+  connectionString: "postgresql://postgres:1q2w3e4r5t6y@curso-postgres.default.svc.cluster.local:5432/curso_db"
