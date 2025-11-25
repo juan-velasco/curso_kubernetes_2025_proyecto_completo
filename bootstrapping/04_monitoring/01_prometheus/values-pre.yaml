@@ -1,0 +1,72 @@
+## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/platform/storage.md
+prometheus:
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: do-block-storage
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 5Gi
+
+grafana:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - grafana-curso.proyectosrandom.es
+    tls:
+      - hosts:
+          - grafana-curso.proyectosrandom.es
+        secretName: grafana-curso-proyectosrandom-es-tls
+  adminUser: admin
+  adminPassword: BHNvPRNsSacnJ6y4rlqb
+
+  persistence:
+    enabled: true
+    type: sts
+    storageClassName: do-block-storage
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+    finalizers:
+      - kubernetes.io/pvc-protection
+
+alertmanager:
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: do-block-storage
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi  
+  config:
+  
+    route:
+      receiver: email
+      group_wait: 10s
+      group_interval: 30s
+      repeat_interval: 12h
+      group_by: ['namespace']
+      routes:
+        - match:
+            alertname: Watchdog
+          receiver: nullreceiver
+    # TODO: configurar alertas por email
+
+    receivers:
+      - name: nullreceiver       
+
+# Desactivamos reglas que no necesitamos, ya que generarán alertas innecesarias
+defaultRules:
+  rules:
+    kubeProxy: false # desactivamos la alerta de kube-proxy por falso positivo
+    kubeSchedulerAlerting: false # desactivamos la alerta de scheduler por falso positivo
+    kubeSchedulerRecording: false # desactivamos la alerta de scheduler por falso positivo
+    kubeControllerManager: false # desactivamos la alerta de controller manager por falso positivo
+    kubernetesResources: false # desactivamos, ya que generará alertas en caso de no soportar la posible caída de un nodo, lo que no es necesario

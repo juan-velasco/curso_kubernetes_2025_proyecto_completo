@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+ name: letsencrypt-staging
+spec:
+ acme:
+   email: jvelasco@iti.es
+   server: https://acme-staging-v02.api.letsencrypt.org/directory
+   privateKeySecretRef:
+     # Secret resource that will be used to store the account's private key.
+     name: lets-encrypt-private-key-staging
+   # Add a single challenge solver, HTTP01 using nginx
+   solvers:
+   - http01:
+       ingress:
+          ingressClassName: nginx
