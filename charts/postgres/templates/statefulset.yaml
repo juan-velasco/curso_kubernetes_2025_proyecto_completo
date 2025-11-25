@@ -47,7 +47,8 @@ spec:
             tcpSocket:
               port: 5432
             initialDelaySeconds: 30
-            periodSeconds: 10          resources:
+            periodSeconds: 10          
+          resources:
             limits:
               cpu: {{ .Values.resources.limits.cpu }}
               memory: {{ .Values.resources.limits.memory }}
