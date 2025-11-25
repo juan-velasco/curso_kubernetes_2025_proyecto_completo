@@ -1,0 +1,4 @@
+apiVersion: v2
+name: curso-postgres
+description: Curso Postgres Helm chart
+version: 1.0.0

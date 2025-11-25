@@ -1,0 +1,21 @@
+replicaCount: 1
+service:
+  type: ClusterIP
+  port: 5432
+image:
+  repository: postgres
+  tag: "16-alpine"
+  pullPolicy: IfNotPresent
+resources:
+  requests:
+    cpu: "100m"
+    memory: "256Mi"   
+  limits:
+    cpu: "200m"
+    memory: "256Mi"
+storageSize: 1Gi
+storageClass: "do-block-storage"
+
+postgresUser: postgres
+postgresPassword: 1q2w3e4r5t6y
+postgresDatabase: curso_db
