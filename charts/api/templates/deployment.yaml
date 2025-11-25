@@ -19,6 +19,12 @@ spec:
         - name: curso-api
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "curso_api.fullname" . }}
+                  key: database-url
           ports:
             - containerPort: 8000
           livenessProbe:
