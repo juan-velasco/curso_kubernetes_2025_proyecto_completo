@@ -7,7 +7,7 @@ spec:
   project: default
 
   source:
-    repoURL: git@github.com:juan-velasco/curso_kubernetes_2025_proyecto_completo.git
+    repoURL: https://github.com/juan-velasco/curso_kubernetes_2025_proyecto_completo.git
     targetRevision: main # Rama del repositorio
     path: charts/redis
     helm:
