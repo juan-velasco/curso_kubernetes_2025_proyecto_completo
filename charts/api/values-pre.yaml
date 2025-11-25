@@ -2,12 +2,12 @@ service:
   type: ClusterIP
   port: 80
 ingress:
-  host: curso-api.proyectosrandom.es
+  host: api-curso.proyectosrandom.es
   clusterIssuer: letsencrypt-prod
   tls:
     - hosts:
-      - curso-api.proyectosrandom.es
-      secretName: curso-api-proyectosrandom-es-tls
+      - api-curso.proyectosrandom.es
+      secretName: api-curso-proyectosrandom-es-tls
 replicaCount: 2
 image:
   repository: jvelascoiti/backend-fast-api
