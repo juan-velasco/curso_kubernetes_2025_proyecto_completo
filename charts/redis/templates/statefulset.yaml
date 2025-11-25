@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "curso_redis.fullname" . }}
+  labels:
+    {{ include "curso_redis.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "curso_redis.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "curso_redis.fullname" . }}
+    spec:
+      containers:
+        - name: curso-redis
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["redis-server"]
+          args:
+            - "--protected-mode no"
+            - "--appendonly yes"
+            - "--appendfsync everysec"
+            - "--save 300 1"
+            - "--maxmemory {{ .Values.resources.limits.redisMemoryMegaBytes }}mb"
+            - "--maxmemory-policy allkeys-lru"
+          ports:
+            - containerPort: 6379
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - redis-cli ping | grep -q PONG
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - redis-cli ping | grep -q PONG
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}    
+          volumeMounts:
+            - mountPath: /data
+              name: redis-data
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.storageSize }}
+        storageClassName: "{{ .Values.storageClass }}"

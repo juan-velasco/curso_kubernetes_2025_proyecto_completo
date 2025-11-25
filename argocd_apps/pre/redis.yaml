@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: curso-redis
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: git@github.com:juan-velasco/curso_kubernetes_2025_proyecto_completo.git
+    targetRevision: main # Rama del repositorio
+    path: charts/redis
+    helm:
+      releaseName: curso-redis
+      valueFiles:
+        - values-pre.yaml
+  destination: 
+    server: https://kubernetes.default.svc
+    namespace: default
+
+  syncPolicy:
+    # automated: # Comentar este bloque para evitar sincronización automática
+    #   prune: true # Borrará cualquier recurso que no esté en el repositorio
+    #   selfHeal: false # No se auto-reparan los cambios realizados a mano
+    # syncOptions:
+    #   - CreateNamespace=true

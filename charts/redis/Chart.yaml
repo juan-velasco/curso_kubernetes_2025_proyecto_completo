@@ -1,0 +1,4 @@
+apiVersion: v2
+name: curso-redis
+description: Curso Redis Helm chart
+version: 1.0.0

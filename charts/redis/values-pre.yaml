@@ -1,0 +1,18 @@
+replicaCount: 1
+service:
+  type: ClusterIP
+  port: 6379
+image:
+  repository: redis
+  tag: "8.0.5-alpine"
+  pullPolicy: IfNotPresent
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"   
+  limits:
+    cpu: "100m"
+    memory: "128Mi"
+    redisMemoryMegaBytes: "900" # Debe tener un margen sobre el límite de memoria
+storageSize: 1Gi
+storageClass: "do-block-storage"
