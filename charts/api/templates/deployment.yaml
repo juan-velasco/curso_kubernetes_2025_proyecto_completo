@@ -5,7 +5,7 @@ metadata:
   labels:
     {{ include "curso_api.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+#  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: {{ include "curso_api.fullname" . }}
