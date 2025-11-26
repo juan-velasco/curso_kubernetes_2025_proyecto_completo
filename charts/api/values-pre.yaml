@@ -18,10 +18,10 @@ image:
   pullPolicy: Always
 resources:
   requests:
-    cpu: "100m"
-    memory: "128Mi"   
+    cpu: "200m"
+    memory: "256Mi"   
   limits:
     cpu: "200m"
-    memory: "128Mi"
+    memory: "256Mi"
 postgres:
   connectionString: "postgresql://postgres:1q2w3e4r5t6y@curso-postgres.default.svc.cluster.local:5432/curso_db"
